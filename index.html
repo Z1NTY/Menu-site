@@ -3,95 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Z1NTY SCRIPTS // MENU</title>
+    <title>Z1NTY // Menu</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #000;
-            font-family: 'Courier New', monospace;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             color: #0af;
             min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            position: relative;
         }
-        /* ВСПЫШКА МОЛНИИ (белый экран) */
-        .flash-overlay {
+        .fog-container {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: white;
-            z-index: 5;
-            opacity: 0;
+            z-index: 0;
             pointer-events: none;
-            transition: opacity 0.08s ease-out;
         }
-        .flash-overlay.active {
-            opacity: 0.7;
-            transition: opacity 0.02s ease-in;
+        .fog-layer {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(ellipse at 20% 50%, rgba(0,120,255,0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 50%, rgba(0,150,255,0.12) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(0,100,255,0.08) 0%, transparent 70%);
+            animation: fogMove 12s ease-in-out infinite;
         }
-        /* ФОН С МОЛНИЯМИ */
-        .lightning-bg {
+        .fog-layer:nth-child(2) { animation-delay: -6s; opacity: 0.7; }
+        @keyframes fogMove {
+            0%, 100% { transform: scale(1) translateY(0); }
+            25% { transform: scale(1.05) translateY(-1vh); }
+            50% { transform: scale(1.02) translateY(1vh); }
+            75% { transform: scale(1.04) translateY(-0.5vh); }
+        }
+        .cubes-container {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: 1;
+            pointer-events: none;
         }
-        .lightning-bg canvas {
-            width: 100%; height: 100%;
+        .cube {
+            position: absolute;
+            width: 20px; height: 20px;
+            border: 2px solid rgba(0, 170, 255, 0.3);
+            background: rgba(0, 170, 255, 0.05);
+            animation: floatCube linear infinite;
         }
-        /* Основной контейнер */
+        @keyframes floatCube {
+            0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
         .main-container {
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 600px;
+            max-width: 550px;
             padding: 20px;
         }
-        /* Кнопка Telegram */
-        .tg-link {
-            position: fixed;
-            top: 20px; right: 20px;
-            z-index: 20;
-            color: #0af;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 18px;
-            padding: 10px 20px;
-            border: 2px solid #0af;
-            border-radius: 40px;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            box-shadow: 0 0 15px #0af;
-            text-shadow: 0 0 8px #0af;
-            transition: all 0.3s ease;
-            letter-spacing: 2px;
-        }
-        .tg-link:hover {
-            background: #0af;
-            color: #000;
-            box-shadow: 0 0 30px #0af;
-            transform: scale(1.05);
-        }
-        /* Карточка */
         .card {
             background: rgba(5, 5, 5, 0.85);
-            backdrop-filter: blur(20px);
-            border: 1px solid #0af;
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 170, 255, 0.5);
             border-radius: 30px;
-            padding: 30px 25px;
-            box-shadow: 0 0 80px rgba(0, 170, 255, 0.25), inset 0 0 30px rgba(0, 170, 255, 0.05);
+            padding: 40px 30px;
+            box-shadow: 0 0 100px rgba(0, 170, 255, 0.3), inset 0 0 40px rgba(0, 170, 255, 0.08);
             text-align: center;
+            animation: cardIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        /* ГЛИТЧ-ЗАГОЛОВОК */
+        @keyframes cardIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); filter: blur(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+        }
+        .neon-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+            filter: drop-shadow(0 0 15px rgba(0, 170, 255, 0.8)) drop-shadow(0 0 30px rgba(0, 170, 255, 0.5));
+            text-shadow: 0 0 20px #0af, 0 0 40px #0af, 0 0 60px #08c;
+        }
+        .custom-emoji {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: transparent;
+            -webkit-text-stroke: 2px #0af;
+            text-stroke: 2px #0af;
+            text-shadow: 0 0 15px #0af, 0 0 30px #0af;
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+        }
         .glitch-title {
-            font-size: 34px;
+            font-size: clamp(26px, 5vw, 38px);
             font-weight: 900;
             letter-spacing: 6px;
             color: #0af;
-            text-shadow: 0 0 20px #0af, 0 0 40px #08c;
+            text-shadow: 0 0 25px #0af, 0 0 50px #0af, 0 0 70px #08c;
+            margin-bottom: 8px;
             position: relative;
             display: inline-block;
             animation: glitch 2.5s infinite;
@@ -102,175 +115,69 @@
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            opacity: 0.7;
+            opacity: 0.6;
         }
         .glitch-title::before {
             color: #0af;
             z-index: -1;
-            animation: glitch-anim-1 0.35s infinite alternate-reverse;
+            animation: glitch-anim-1 0.4s infinite alternate-reverse;
         }
         .glitch-title::after {
             color: #f0a;
             z-index: -2;
-            animation: glitch-anim-2 0.45s infinite alternate-reverse;
+            animation: glitch-anim-2 0.5s infinite alternate-reverse;
         }
         @keyframes glitch-anim-1 {
             0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
-            20% { clip-path: inset(20% 0 30% 0); transform: translate(-4px, 4px); }
-            40% { clip-path: inset(50% 0 10% 0); transform: translate(4px, -3px); }
-            60% { clip-path: inset(10% 0 60% 0); transform: translate(-3px, 3px); }
-            80% { clip-path: inset(80% 0 5% 0); transform: translate(3px, -4px); }
+            20% { clip-path: inset(25% 0 35% 0); transform: translate(-5px, 5px); }
+            40% { clip-path: inset(55% 0 15% 0); transform: translate(5px, -4px); }
+            60% { clip-path: inset(15% 0 65% 0); transform: translate(-4px, 4px); }
+            80% { clip-path: inset(85% 0 8% 0); transform: translate(4px, -5px); }
         }
         @keyframes glitch-anim-2 {
             0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
-            20% { clip-path: inset(60% 0 10% 0); transform: translate(4px, -4px); }
-            40% { clip-path: inset(20% 0 50% 0); transform: translate(-4px, 3px); }
-            60% { clip-path: inset(30% 0 40% 0); transform: translate(3px, 4px); }
-            80% { clip-path: inset(5% 0 80% 0); transform: translate(-3px, -3px); }
+            20% { clip-path: inset(65% 0 15% 0); transform: translate(5px, -5px); }
+            40% { clip-path: inset(25% 0 55% 0); transform: translate(-5px, 4px); }
+            60% { clip-path: inset(35% 0 45% 0); transform: translate(4px, 5px); }
+            80% { clip-path: inset(8% 0 85% 0); transform: translate(-4px, -4px); }
         }
-        /* Загрузочный экран */
-        .loading-screen { display: block; }
-        .loading-text {
-            font-size: 15px;
+        .subtitle {
+            font-size: 14px;
+            color: rgba(0, 170, 255, 0.8);
             letter-spacing: 4px;
-            color: #0af;
-            text-shadow: 0 0 15px #0af;
-            margin-bottom: 20px;
-            font-weight: bold;
+            margin-bottom: 35px;
+            text-shadow: 0 0 12px rgba(0, 170, 255, 0.6);
+            text-transform: uppercase;
         }
-        .progress-bar-container {
-            width: 100%;
-            height: 6px;
-            background: #0a0a0a;
-            border: 1px solid #0af;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 25px;
-            box-shadow: 0 0 20px #0af;
-        }
-        .progress-fill {
-            width: 0%;
-            height: 100%;
-            background: #0af;
-            box-shadow: 0 0 25px #0af;
-            transition: width 0.1s linear;
-        }
-        .status-text {
-            font-size: 13px;
-            color: #aaa;
-            letter-spacing: 2px;
-            margin-bottom: 5px;
-            min-height: 20px;
-        }
-        /* Галочка с дымом */
-        .checkmark-container {
-            display: none;
-            position: relative;
-            width: 140px; height: 140px;
-            margin: 30px auto;
-        }
-        .green-smoke {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0,255,0,0.6) 0%, rgba(0,255,0,0.3) 30%, transparent 60%);
-            animation: smokeExpand 3s ease-out infinite;
-            pointer-events: none;
-        }
-        .green-smoke:nth-child(1) { width: 120px; height: 120px; animation-delay: 0s; }
-        .green-smoke:nth-child(2) { width: 120px; height: 120px; animation-delay: 0.6s; }
-        .green-smoke:nth-child(3) { width: 120px; height: 120px; animation-delay: 1.2s; }
-        .green-smoke:nth-child(4) { width: 120px; height: 120px; animation-delay: 1.8s; }
-        .green-smoke:nth-child(5) { width: 120px; height: 120px; animation-delay: 2.4s; }
-        @keyframes smokeExpand {
-            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.9; }
-            100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
-        }
-        .checkmark-circle {
-            width: 100px; height: 100px;
-            border-radius: 50%;
-            border: 5px solid #0f0;
-            box-shadow: 0 0 50px #0f0, 0 0 100px #0f0;
-            animation: circlePulse 1s ease-out;
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        @keyframes circlePulse {
-            0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
-            60% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-        }
-        .checkmark {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 70px;
-            color: #0f0;
-            text-shadow: 0 0 50px #0f0;
-            z-index: 10;
-        }
-        .complete-text {
-            color: #0f0;
-            text-shadow: 0 0 25px #0f0;
-            font-size: 18px;
-            letter-spacing: 4px;
-            display: none;
-        }
-        /* Основное меню */
-        .main-menu {
-            display: none;
-            opacity: 0;
-            filter: blur(10px);
-            transition: opacity 0.8s ease, filter 0.8s ease;
-        }
-        .main-menu.show {
-            opacity: 1;
-            filter: blur(0);
-        }
-        .welcome {
-            font-size: 38px;
-            font-weight: 300;
-            color: #0af;
-            text-shadow: 0 0 25px #0af, 0 0 50px #08c;
-            letter-spacing: 6px;
-            margin-bottom: 40px;
-            animation: textPulse 2s infinite alternate;
-        }
-        @keyframes textPulse {
-            from { text-shadow: 0 0 20px #0af, 0 0 40px #08c; }
-            to { text-shadow: 0 0 35px #0af, 0 0 70px #0af, 0 0 100px #08c; }
-        }
-        /* Кнопки */
         .btn-group {
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 18px;
             width: 100%;
             max-width: 360px;
             margin: 0 auto;
         }
         .neon-btn {
             display: block;
-            padding: 18px 20px;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
+            width: 100%;
+            padding: 18px;
+            background: transparent;
             border: 2px solid #0af;
             border-radius: 50px;
             color: #0af;
-            font-size: 21px;
-            font-weight: bold;
+            font-size: 20px;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            text-decoration: none;
-            text-align: center;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 0 25px rgba(0, 170, 255, 0.3), inset 0 0 15px rgba(0, 170, 255, 0.1);
-            text-shadow: 0 0 12px #0af;
+            letter-spacing: 4px;
             cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 30px rgba(0, 170, 255, 0.4), inset 0 0 15px rgba(0, 170, 255, 0.1);
+            text-shadow: 0 0 15px rgba(0, 170, 255, 0.8);
             position: relative;
             overflow: hidden;
+            text-decoration: none;
+            text-align: center;
+            box-sizing: border-box;
         }
         .neon-btn::before {
             content: '';
@@ -284,292 +191,187 @@
             background: #0af;
             color: #000;
             border-color: #fff;
-            box-shadow: 0 0 60px #0af, 0 0 100px #0af;
+            box-shadow: 0 0 70px #0af, 0 0 100px #0af;
             transform: scale(1.04);
             text-shadow: none;
-            letter-spacing: 5px;
+            letter-spacing: 6px;
         }
-        .neon-btn:hover::before {
-            left: 100%;
-        }
-        /* Модалка проверки */
-        .security-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 999;
-            justify-content: center;
-            align-items: center;
-        }
-        .security-card {
-            background: #0a0a0a;
-            border: 1px solid #0af;
-            border-radius: 30px;
-            padding: 40px 30px;
-            text-align: center;
-            box-shadow: 0 0 60px #0af;
-            width: 90%;
-            max-width: 400px;
-        }
-        .security-title {
-            font-size: 19px;
-            color: #0af;
-            text-shadow: 0 0 10px #0af;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-        }
-        .security-fill {
-            width: 0%;
-            height: 6px;
-            background: #0f0;
-            box-shadow: 0 0 20px #0f0;
-            border-radius: 10px;
-            transition: width 2s linear;
-        }
-        .security-success {
-            display: none;
-            color: #0f0;
-            font-size: 19px;
-            text-shadow: 0 0 15px #0f0;
-            margin-top: 15px;
-            letter-spacing: 3px;
-        }
-        /* Подвал */
+        .neon-btn:hover::before { left: 100%; }
+        .neon-btn:active { transform: scale(0.97); }
         .footer {
             margin-top: 30px;
-            color: #046;
+            color: rgba(0, 100, 180, 0.7);
             font-size: 12px;
             letter-spacing: 3px;
             text-align: center;
-            text-shadow: 0 0 10px #046;
+            text-shadow: 0 0 10px rgba(0, 100, 180, 0.5);
         }
+        .support-trigger {
+            position: fixed;
+            left: 18px;
+            bottom: 100px;
+            z-index: 999;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(0,170,255,0.1);
+            border: 2px solid #0af;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 25px rgba(0,170,255,0.4);
+            transition: all 0.3s ease;
+            animation: float 2.5s ease-in-out infinite;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        .support-trigger:hover { box-shadow: 0 0 45px rgba(0,170,255,0.8); transform: scale(1.08); }
+        .support-trigger .custom-emoji-small {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: transparent;
+            -webkit-text-stroke: 1.5px #0af;
+            text-stroke: 1.5px #0af;
+            text-shadow: 0 0 8px #0af;
+            font-size: 22px;
+        }
+        .support-modal {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90vw;
+            max-width: 420px;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid #0af;
+            border-radius: 20px;
+            z-index: 1001;
+            display: none;
+            padding: 25px;
+            box-shadow: 0 0 60px rgba(0,170,255,0.4);
+        }
+        .support-modal.show { display: block; }
+        .support-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            display: none;
+        }
+        .support-overlay.show { display: block; }
+        .support-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0af;
+            text-shadow: 0 0 15px #0af;
+            margin-bottom: 15px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        .support-rules { color: #ccc; font-size: 13px; line-height: 1.6; margin-bottom: 20px; max-height: 200px; overflow-y: auto; padding-right: 5px; }
+        .support-rules strong { color: #0af; text-shadow: 0 0 5px #0af; }
+        .checkbox-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer; padding: 10px; border-radius: 12px; transition: 0.2s; border: 1px solid transparent; }
+        .checkbox-row:hover { background: rgba(0,170,255,0.05); }
+        .checkbox-circle { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #0af; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; box-shadow: 0 0 8px rgba(0,170,255,0.3); }
+        .checkbox-circle.checked { background: #0af; border-color: #0af; box-shadow: 0 0 15px #0af; }
+        .checkbox-circle.checked::after { content: '✓'; color: #000; font-weight: bold; font-size: 14px; }
+        .checkbox-label { font-size: 13px; color: #ccc; user-select: none; }
+        .support-btn { display: block; width: 100%; padding: 14px; background: #0af; border: none; border-radius: 50px; color: #000; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 25px #0af; margin-top: 15px; text-decoration: none; text-align: center; }
+        .support-btn.disabled { background: transparent; border: 2px solid rgba(0,170,255,0.2); color: rgba(0,170,255,0.3); box-shadow: none; cursor: not-allowed; pointer-events: none; }
+        .support-btn:not(.disabled):hover { box-shadow: 0 0 50px #0af; transform: scale(1.03); }
+        .support-close { position: absolute; top: 10px; right: 15px; background: none; border: none; color: #f55; font-size: 22px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <!-- ВСПЫШКА МОЛНИИ -->
-    <div class="flash-overlay" id="flashOverlay"></div>
-
-    <!-- ФОН С МОЛНИЯМИ -->
-    <div class="lightning-bg"><canvas id="lightningCanvas"></canvas></div>
-
-    <!-- КНОПКА TELEGRAM -->
-    <a href="https://t.me/z1ntyscripts" class="tg-link" target="_blank">Telegram</a>
+    <div class="fog-container"><div class="fog-layer"></div><div class="fog-layer"></div></div>
+    <div class="cubes-container" id="cubesContainer"></div>
 
     <div class="main-container">
-        <div class="card" id="mainCard">
-            <!-- ЭКРАН ЗАГРУЗКИ -->
-            <div class="loading-screen" id="loadingScreen">
-                <div class="glitch-title">Z1NTY SCRIPTS MENU</div>
-                <div class="loading-text">Загрузка Меню, подождите</div>
-                <div class="progress-bar-container">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <div class="status-text" id="statusText">Загрузка обьектов</div>
-                <div class="checkmark-container" id="checkmarkContainer">
-                    <div class="green-smoke"></div>
-                    <div class="green-smoke"></div>
-                    <div class="green-smoke"></div>
-                    <div class="green-smoke"></div>
-                    <div class="green-smoke"></div>
-                    <div class="checkmark-circle"></div>
-                    <div class="checkmark">✓</div>
-                </div>
-                <div class="complete-text" id="completeText">Загрузка завершена, загружаем меню</div>
+        <div class="card">
+            <span class="custom-emoji">⚡</span>
+            <div class="glitch-title">Z1NTY SCRIPTS MENU</div>
+            <div class="subtitle">Выбери действие</div>
+            <div class="btn-group">
+                <a href="https://delta.filenetwork.vip/file/Delta-2.725.1142.apk" class="neon-btn" target="_blank">💾 СКАЧАТЬ ДЕЛЬТУ</a>
+                <a href="https://t.me/z1ntyscripts/7" class="neon-btn" target="_blank">📺 КАК УСТАНОВИТЬ?</a>
+                <a href="https://z1nty.github.io/Scripts/" class="neon-btn" target="_blank">🎮 СКРИПТЫ НА РЕЖИМЫ</a>
+                <a href="https://z1nty.github.io/Bypass/" class="neon-btn" target="_blank">🔑 BYPASS DELTA X</a>
             </div>
-
-            <!-- ОСНОВНОЕ МЕНЮ -->
-            <div class="main-menu" id="mainMenu">
-                <div class="glitch-title">Z1NTY SCRIPTS</div>
-                <div class="welcome">ДОБРО ПОЖАЛОВАТЬ!</div>
-                <div class="btn-group">
-                    <a href="#" class="neon-btn" data-url="https://delta.filenetwork.vip/file/Delta-2.724.735.apk" onclick="handleClick(event, this)">СКАЧАТЬ ДЕЛЬТУ</a>
-                    <a href="#" class="neon-btn" data-url="https://t.me/z1ntyscripts/7" onclick="handleClick(event, this)">КАК УСТАНОВИТЬ?</a>
-                    <a href="#" class="neon-btn" data-url="https://z1nty.github.io/Scripts/" onclick="handleClick(event, this)">СКРИПТЫ НА РЕЖИМЫ</a>
-                </div>
-                <div class="footer">█ Z1NTY PROJECT // QUANTUM EDITION █</div>
-            </div>
+            <div class="footer">█ Z1NTY PROJECT // QUANTUM EDITION █</div>
         </div>
     </div>
 
-    <!-- МОДАЛКА ПРОВЕРКИ БЕЗОПАСНОСТИ -->
-    <div class="security-modal" id="securityModal">
-        <div class="security-card">
-            <div class="security-title">Проверка безопасности сайта</div>
-            <div class="progress-bar-container" style="background:#0a0a0a; border-color:#0af;">
-                <div class="security-fill" id="securityFill"></div>
-            </div>
-            <div class="security-success" id="securitySuccess">Успешно, перебрасываем на сайт</div>
+    <!-- ТЕХПОДДЕРЖКА -->
+    <div class="support-trigger" id="supportTrigger"><span class="custom-emoji-small">🛟</span></div>
+    <div class="support-overlay" id="supportOverlay"></div>
+    <div class="support-modal" id="supportModal">
+        <button class="support-close" id="supportClose">✕</button>
+        <div class="support-title">🛟 ТЕХНИЧЕСКАЯ ПОДДЕРЖКА</div>
+        <div class="support-rules">
+            <strong>‼️ПРАВИЛА ОБЩЕНИЯ С АДМИНИСТРАЦИЕЙ‼️</strong><br><br>
+            <strong>Запрещено:</strong><br>
+            1. Писать не по делу.<br>
+            2. Писать всякую чушь.<br>
+            3. Спамить, засорять поддержку.<br>
+            4. Оскорблять администрацию.<br>
+            5. Кидать разные 18+ материалы что совмещает за собой и 1 пункт.<br>
+            6. Опрашивать администрацию про личную жизнь и прочее.<br><br>
+            Тех поддержка создана только чтобы сообщать об багах или неработающих функциях, писать "когда будут скрипты?" разрешается, за все выше перечисленные пункты вам карается блокировка в тех поддержке навсегда без права на обжалования.<br><br>
+            <strong>Нажимая на кнопку "Написать в тех поддержку" вы автоматически соглашаетесь со всеми условиями и правилами нашей команды Z1NTY, если вы нарушили пункт, обжалование невозможно.</strong>
         </div>
+        <div class="checkbox-row" id="checkboxAccept" onclick="toggleCheckbox('accept')">
+            <div class="checkbox-circle" id="circleAccept"></div>
+            <span class="checkbox-label">Я принимаю условия указанные выше</span>
+        </div>
+        <div class="checkbox-row" id="checkboxDecline" onclick="toggleCheckbox('decline')">
+            <div class="checkbox-circle checked" id="circleDecline"></div>
+            <span class="checkbox-label">Я не принимаю условия указанные выше</span>
+        </div>
+        <a href="https://t.me/Z1NTY_SupportBot" target="_blank" class="support-btn disabled" id="supportLink">🔧 Написать в тех поддержку</a>
     </div>
 
     <script>
-        // === ФОН С РЕАЛИСТИЧНЫМИ МОЛНИЯМИ (1 удар в 5 секунд) ===
-        const canvas = document.getElementById('lightningCanvas');
-        const ctx = canvas.getContext('2d');
-        const flashOverlay = document.getElementById('flashOverlay');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        let lightningActive = false;
-        let lightningTimer = 0;
-
-        function drawLightningBolt() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Одна мощная молния
-            let x = canvas.width / 2 + (Math.random() - 0.5) * 300;
-            let y = -20;
-
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-
-            // Градиент для молнии
-            const gradient = ctx.createLinearGradient(x, 0, x + 60, canvas.height);
-            gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-            gradient.addColorStop(0.1, 'rgba(200, 230, 255, 0.9)');
-            gradient.addColorStop(0.4, 'rgba(0, 180, 255, 0.7)');
-            gradient.addColorStop(1, 'rgba(0, 100, 255, 0.2)');
-
-            ctx.strokeStyle = gradient;
-            ctx.lineWidth = 4;
-            ctx.shadowColor = '#fff';
-            ctx.shadowBlur = 40;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-
-            // Основной ствол
-            let branchX = x;
-            let branchY = y;
-            while (branchY < canvas.height + 20) {
-                branchX += (Math.random() - 0.5) * 80;
-                branchY += Math.random() * 25 + 20;
-                ctx.lineTo(branchX, branchY);
-            }
-            ctx.stroke();
-
-            // Тонкие ветви
-            ctx.lineWidth = 2;
-            ctx.shadowBlur = 25;
-            for (let i = 0; i < 3; i++) {
-                let bx = x + (Math.random() - 0.5) * 200;
-                let by = canvas.height * Math.random() * 0.8;
-                ctx.beginPath();
-                ctx.moveTo(bx, by);
-                ctx.strokeStyle = 'rgba(200, 230, 255, 0.7)';
-                let bx2 = bx;
-                let by2 = by;
-                while (by2 < canvas.height) {
-                    bx2 += (Math.random() - 0.5) * 100;
-                    by2 += Math.random() * 20 + 15;
-                    ctx.lineTo(bx2, by2);
-                }
-                ctx.stroke();
-            }
-
-            // Вспышка
-            flashOverlay.classList.add('active');
-            setTimeout(() => {
-                flashOverlay.classList.remove('active');
-            }, 80);
-
-            ctx.shadowBlur = 0;
+        // Плавающие кубики
+        const cubesContainer = document.getElementById('cubesContainer');
+        for (let i = 0; i < 15; i++) {
+            const cube = document.createElement('div');
+            cube.className = 'cube';
+            cube.style.left = Math.random() * 95 + '%';
+            cube.style.width = (Math.random() * 25 + 10) + 'px';
+            cube.style.height = cube.style.width;
+            cube.style.animationDuration = (Math.random() * 12 + 10) + 's';
+            cube.style.animationDelay = (Math.random() * 10) + 's';
+            cubesContainer.appendChild(cube);
         }
 
-        function lightningLoop() {
-            if (!lightningActive) {
-                // Ждём 5 секунд
-                lightningTimer = setTimeout(() => {
-                    lightningActive = true;
-                    drawLightningBolt();
-                    // Молния видна 150 мс, потом гаснет
-                    setTimeout(() => {
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        lightningActive = false;
-                        lightningLoop();
-                    }, 150);
-                }, 5000);
+        // Техподдержка
+        const supportTrigger = document.getElementById('supportTrigger');
+        const supportModal = document.getElementById('supportModal');
+        const supportOverlay = document.getElementById('supportOverlay');
+        const supportClose = document.getElementById('supportClose');
+        const circleAccept = document.getElementById('circleAccept');
+        const circleDecline = document.getElementById('circleDecline');
+        const supportLink = document.getElementById('supportLink');
+        let userAccepts = false;
+
+        function openSupport() { supportModal.classList.add('show'); supportOverlay.classList.add('show'); }
+        function closeSupport() { supportModal.classList.remove('show'); supportOverlay.classList.remove('show'); }
+        supportTrigger.addEventListener('click', openSupport);
+        supportClose.addEventListener('click', closeSupport);
+        supportOverlay.addEventListener('click', closeSupport);
+
+        function toggleCheckbox(type) {
+            if (type === 'accept') {
+                userAccepts = true;
+                circleAccept.classList.add('checked');
+                circleDecline.classList.remove('checked');
+                supportLink.classList.remove('disabled');
+            } else {
+                userAccepts = false;
+                circleDecline.classList.add('checked');
+                circleAccept.classList.remove('checked');
+                supportLink.classList.add('disabled');
             }
-        }
-        lightningLoop();
-
-        // === ЭКРАН ЗАГРУЗКИ ===
-        const progressFill = document.getElementById('progressFill');
-        const statusText = document.getElementById('statusText');
-        const checkmarkContainer = document.getElementById('checkmarkContainer');
-        const completeText = document.getElementById('completeText');
-        const loadingScreen = document.getElementById('loadingScreen');
-        const mainMenu = document.getElementById('mainMenu');
-
-        const messages = [
-            { time: 0, text: 'Загрузка обьектов' },
-            { time: 1.2, text: 'Загрузка шейдеров' },
-            { time: 2.8, text: 'Загрузка всех кнопок и логика ссылок' },
-            { time: 4.5, text: 'Финальная проверка...' }
-        ];
-
-        let startTime = Date.now();
-        let duration = 7000;
-
-        function updateLoading() {
-            let elapsed = Date.now() - startTime;
-            let percent = Math.min(100, (elapsed / duration) * 100);
-            progressFill.style.width = percent + '%';
-
-            for (let i = messages.length - 1; i >= 0; i--) {
-                if (elapsed >= messages[i].time * 1000) {
-                    statusText.innerText = messages[i].text;
-                    break;
-                }
-            }
-
-            if (elapsed >= 5300 && checkmarkContainer.style.display === 'none') {
-                checkmarkContainer.style.display = 'block';
-                statusText.style.display = 'none';
-                completeText.style.display = 'block';
-            }
-
-            if (elapsed >= duration) {
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                    mainMenu.style.display = 'block';
-                    requestAnimationFrame(() => {
-                        mainMenu.classList.add('show');
-                    });
-                }, 300);
-                return;
-            }
-
-            requestAnimationFrame(updateLoading);
-        }
-        updateLoading();
-
-        // === МОДАЛКА ПРОВЕРКИ БЕЗОПАСНОСТИ ===
-        let targetUrl = '';
-        function handleClick(e, btn) {
-            e.preventDefault();
-            targetUrl = btn.dataset.url;
-            document.getElementById('securityModal').style.display = 'flex';
-            document.getElementById('securityFill').style.width = '0%';
-            document.getElementById('securitySuccess').style.display = 'none';
-
-            setTimeout(() => {
-                document.getElementById('securityFill').style.width = '100%';
-            }, 50);
-
-            setTimeout(() => {
-                document.getElementById('securitySuccess').style.display = 'block';
-            }, 2100);
-
-            setTimeout(() => {
-                document.getElementById('securityModal').style.display = 'none';
-                if (targetUrl) window.open(targetUrl, '_blank');
-            }, 3100);
         }
     </script>
 </body>
